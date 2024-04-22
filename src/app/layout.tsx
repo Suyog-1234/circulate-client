@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ThemeProvider } from "@/lib/ThemeProvider";
+import { cn } from "@/lib/utils";
+import ReduxStoreProvider from "@/lib/ReduxStoreProvider";
+import { Toaster, toast } from 'sonner'
+const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +19,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn(poppins.className, "min-h-screen bg-background")}>
+        <ThemeProvider
+          attribute="class"
+          themes={["light", "dark"]}
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <ReduxStoreProvider>
+             <Toaster position="top-right" richColors closeButton theme="dark"/>
+            {children}
+          </ReduxStoreProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
